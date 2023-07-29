@@ -1,0 +1,29 @@
+{
+  "name": "@popug/utils-auth",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "build:prod": "npm run clean && npx tsc",
+    "publish": "npm run build:prod",
+    "clean": "rimraf dist/ tsconfig.tsbuildinfo",
+    "format": "eslint \"src/**/*.ts\" --fix",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "author": "",
+  "license": "Proprietary",
+  "dependencies": {
+    "@nestjs/jwt": "^10.1.0",
+    "@nestjs/passport": "^10.0.0",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "jsonwebtoken": "^9.0.1",
+    "@nestjs/common": "10.1.2",
+    "@nestjs/config": "^3.0.0",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "express": "4.18.2"
+  }
+}

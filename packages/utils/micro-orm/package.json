@@ -1,0 +1,26 @@
+{
+  "name": "@popug/utils-micro-orm",
+  "version": "0.1.0",
+  "description": "",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "build:prod": "npm run clean && npx tsc",
+    "publish": "npm run build:prod",
+    "clean": "rimraf dist/ tsconfig.tsbuildinfo",
+    "format": "eslint \"src/**/*.ts\" --fix",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "author": "",
+  "license": "Proprietary",
+  "dependencies": {
+    "@popug/utils-common": "0.1.0",
+    "@mikro-orm/core": "^5.7.12",
+    "@mikro-orm/postgresql": "^5.7.12",
+    "@mikro-orm/nestjs": "^5.2.0",
+    "@nestjs/common": "10.1.2",
+    "@nestjs/config": "^3.0.0",
+    "rxjs": "^7.8.1"
+  }
+}

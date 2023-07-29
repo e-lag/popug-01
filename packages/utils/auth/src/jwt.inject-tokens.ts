@@ -1,0 +1,2 @@
+// export const JWT_MODULE = 'JWT_F';
+export const PASSPORT_MOBILE_CONFIG = 'PASSPORT_MOBILE_CONFIG';

@@ -1,0 +1,221 @@
+version: '3.7'
+
+services:
+
+  ## ** services **
+  srv-users:
+    build:
+      dockerfile: docker/backend.Dockerfile
+      context: .
+    command: sh -c "/wait && cd packages/srv-users && npm run migrate:up && node dist/main.js"
+    ports:
+      - '${SRV_USER_HTTP_PORT}:${SRV_USER_HTTP_PORT}'
+    depends_on:
+      - postgres
+    networks:
+      - chariot
+    labels:
+      application: chariot
+    volumes:
+      - ./keys:/app/keys
+      - ./logs:/app/logs
+    environment:
+      SRV_USER_JWT_PUBLIC_KEY: ${SRV_USER_JWT_PUBLIC_KEY:-/app/keys/id_rsa_pub.pem}
+      SRV_USER_JWT_PRIVATE_KEY: ${SRV_USER_JWT_PRIVATE_KEY:-/app/keys/id_rsa_priv.pem}
+      SRV_USER_DATABASE_URL: ${SRV_USER_DATABASE_URL:-postgresql://srv_vehicles_usr:asdvcw23fawef@postgres:5432/srv_users_db}
+      SRV_USER_AMQP_URI: ${SRV_USER_AMQP_URI:-amqp://srv_users_login:asdvcw23fawef@rabbit-mq:5672/}
+      SRV_USER_LOG_DIR: ${SRV_USER_LOG_DIR:-/app/logs/srv-users}
+      SRV_USER_LOGGER_DEBUG: ${SRV_USER_LOGGER_DEBUG:-on}
+      SRV_USER_IS_PRODUCT: ${SRV_USER_IS_PRODUCT:-false}
+      SRV_USER_SENDGRID_API_KEY: ${SRV_USER_SENDGRID_API_KEY:-aaaaaa}
+      SRV_USER_EMAILS_IS_ACTIVE: ${SRV_USER_EMAILS_IS_ACTIVE:-false}
+      SRV_USER_EMAIL_NOTIFICATION: ${SRV_USER_EMAIL_NOTIFICATION:-info@drivepoint.app}
+      SRV_USER_DEVELOP_PUBLIC_URL: ${SRV_USER_DEVELOP_PUBLIC_URL:-https://api.dev.chariot.systems/users/}
+      SRV_USER_APP_VERSION: ${SRV_USER_APP_VERSION:-0.1.0}
+      SRV_USER_HTTP_PORT: ${SRV_USER_HTTP_PORT:-3700}
+      SRV_USER_HTTP_JSON_LIMIT: ${SRV_USER_HTTP_JSON_LIMIT:-10mb}
+
+  srv-vehicles:
+    build:
+      dockerfile: docker/backend.Dockerfile
+      context: .
+    command: sh -c "/wait && cd packages/srv-vehicles && npm run migration:up && node dist/main.js"
+    ports:
+      - '${SRV_VEHICLES_HTTP_PORT}:${SRV_VEHICLES_HTTP_PORT}'
+    depends_on:
+      - postgres
+    networks:
+      - chariot
+    labels:
+      application: chariot
+    volumes:
+      - ./keys:/app/keys
+      - ./logs:/app/logs
+    environment:
+      SRV_VEHICLES_JWT_PUBLIC_KEY: ${SRV_VEHICLES_JWT_PUBLIC_KEY:-/app/keys/id_rsa_pub.pem}
+      SRV_VEHICLES_POSTGRES_CONNECT_URL: ${SRV_VEHICLES_POSTGRES_CONNECT_URL:-postgresql://srv_vehicles_usr:asdvcw23fawef@postgres:5432/srv_vehicles_db}
+      SRV_VEHICLES_AMQP_URI: ${SRV_VEHICLES_AMQP_URI:-amqp://srv_vehicles_usr:asdvcw23fawef@rabbit-mq:5672/}
+      SRV_VEHICLES_LOG_DIR: ${SRV_VEHICLES_LOG_DIR:-/app/logs/srv-vehicles}
+      SRV_VEHICLES_LOGGER_DEBUG: ${SRV_VEHICLES_LOGGER_DEBUG:-on}
+      SRV_VEHICLES_IS_PRODUCT: ${SRV_VEHICLES_IS_PRODUCT:-false}
+      SRV_VEHICLES_HTTP_PORT: ${SRV_VEHICLES_HTTP_PORT:-3702}
+      SRV_VEHICLES_HTTP_JSON_LIMIT: ${SRV_VEHICLES_HTTP_JSON_LIMIT:-10mb}
+      SRV_VEHICLES_APP_VERSION: ${SRV_VEHICLES_APP_VERSION:-0.1.0}
+      SRV_VEHICLES_DEVELOP_PUBLIC_URL: ${SRV_VEHICLES_DEVELOP_PUBLIC_URL:-https://api.dev.chariot.systems/vehicles/}
+
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:15.1-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-123456}
+#      POSTGRES_DB: po
+      PGDATA: /data/postgres
+
+    ulimits:
+      nofile:
+        hard: 262144
+        soft: 262144
+    labels:
+      application: chariot
+
+    volumes:
+      - postgres-data:/data/postgres
+      - ./docker/postgres-entrypoint-initdb:/docker-entrypoint-initdb.d
+
+    ports:
+      - ${POSTGRES_PORT:-8432}:5432
+    networks:
+      - chariot
+    restart: unless-stopped
+
+  kafka:
+    image: bitnami/kafka:3.4.0
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:9092,EXTERNAL://:9093,CONTROLLER://:9094
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_KRAFT_CLUSTER_ID=N-8Epk7LTfCc-lObC7llXA
+    healthcheck:
+      test: ["CMD", "bash", "-c", "unset", "JMX_PORT", ";", "/opt/bitnami/kafka/bin/kafka-topics.sh", "--bootstrap-server", "127.0.0.1:9002", "--list"]
+      interval: 10s
+      start_period: 10s
+      timeout: 2s
+      retries: 15
+    expose:
+      - 9093
+    ports:
+      - 9093:9093
+      - 9092:9092
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.7.0
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+
+#  pgadmin:
+#    container_name: pgadmin_container
+#    image: dpage/pgadmin4:4.22
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@admin.com}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-123456}
+#      DB_HOST: postgres
+#    volumes:
+#      - pgadmin:/root/.pgadmin
+#    labels:
+#      application: chariot
+#    ports:
+#      - "${PGADMIN_PORT:-8450}:80"
+#    networks:
+#      - chariot
+#    restart: unless-stopped
+#  rabbit-mq:
+#    container_name: rabbit-mq
+#    build: docker/rabbit-mq
+#    hostname: rabbit-mq
+#    restart: always
+#    environment:
+#      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-radmin}
+#      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-123456}
+#      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST:-rabbitMq}
+#      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE:-SWQOKODSQALRPCLNMEQG}
+#      RABBITMQ_LOG_BASE : /var/log/rabbitmq
+#      RABBITMQ_MNESIA_BASE: /var/lib/rabbitmq
+#      RABBITMQ_SCHEMA_DIR: /var/lib/rabbitmq
+#    volumes:
+#      - rabbit-data:/var/lib/rabbitmq
+#      - rabbit-logs:/var/log/rabbitmq
+#    ports:
+#      - "4369:4369"
+#      - "5672:5672"
+#      - "15672:15672"
+#      - "25672:25672"
+#      - "35197:35197"
+#    networks:
+#      - chariot
+#  nginx:
+#    container_name: chariot-nginx
+#    image: nginx:1.15-alpine
+#    hostname: crt-nginx
+#    restart: always
+#    #    environment:
+#    networks:
+#      - chariot
+#    volumes:
+#      - nginx-conf:/etc/nginx/conf.d
+#      - nginx-sites:/var/www/sites
+#      - nginx-logs:/var/log
+#      - letsencrypt:/etc/letsencrypt
+#      - certbot:/var/www/certbot
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+#    labels:
+#      application: chariot
+#  certbot:
+#    image: certbot/certbot
+#    volumes:
+#      - letsencrypt:/etc/letsencrypt
+#      - certbot:/var/www/certbot
+#    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+#    labels:
+#      application: chariot
+
+volumes:
+#  rabbit-data:
+#  rabbit-logs:
+  apps-logs:
+  postgres-data:
+  postgres-logs:
+  pgadmin:
+#  certbot:
+#  letsencrypt:
+#  nginx-sites:
+#  nginx-conf:
+#  nginx-logs:
+
+
+
+networks:
+  chariot:
+    name: chariot
+    driver: bridge
+
