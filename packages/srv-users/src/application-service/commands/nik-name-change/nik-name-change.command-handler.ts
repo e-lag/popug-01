@@ -18,7 +18,7 @@ export class NikNameChangeCommandHandler
       throw new Error(UserErrors.NotFound);
     }
 
-    user.nikSet(command.nikName);
+    user.nikName = command.nikName;
     await this.em.flush();
   }
 }

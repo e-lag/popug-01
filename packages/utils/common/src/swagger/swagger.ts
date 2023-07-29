@@ -36,7 +36,7 @@ export const documentSave = (document: OpenAPIObject, optionalUrl: string): void
  * @constructor
  */
 export function SwaggerStart(
-  app:  INestApplication,
+  app: INestApplication,
   port: string,
   title: string,
   servers: { url: string; descr: string }[],

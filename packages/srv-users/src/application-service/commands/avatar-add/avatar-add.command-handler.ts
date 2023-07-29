@@ -19,7 +19,7 @@ export class AvatarAddCommandHandler
       throw new Error(UserErrors.NotFound);
     }
 
-    user.avatarSet(command.avatar);
+    user.avatar = command.avatar;
 
     await this.em.flush();
   }

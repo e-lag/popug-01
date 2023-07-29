@@ -1,10 +1,11 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { INTERVAL_1_DAY, UuidGenerator } from '@popug/utils-common';
 
 import { UserDomain } from '../../../domain/user.domain';
 import { RegisterResponseDto } from '../../../dtos';
-import { User } from '../../../entities/user.entity';
+import { UserEmailConfirm } from '../../../entities/user-email-confirm.entity';
 import { UserLogin } from '../../../entities/user-login.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
 import { UserRepositoryAdapter } from '../../../infrastructure/user.repository-adapter';
@@ -53,7 +54,7 @@ export class UserRegisterCommandHandler
       password: null,
       phone: null,
     });
-
+    user.id = UuidGenerator.generate();
     this._logger.verbose('set pass');
     // ставим пароль
     user.passwordSet(command.password);
@@ -61,16 +62,12 @@ export class UserRegisterCommandHandler
     this._logger.verbose('save user');
     this._logger.debug(user);
     // сохраняем пользователя
-    this.em.persist(User);
+    this.em.persist(user);
     // await this.userRepository.userSave(user);
     this._logger.verbose('generate confirm code');
     // готовим код для email и фиксируем его
     const code: string = this.userRepository.userEmailConfirmCodeGenerate();
     this._logger.verbose('send email confirm', {
-      email: user.email,
-      code,
-    });
-    this._logger.debug({
       email: user.email,
       code,
     });
@@ -81,6 +78,19 @@ export class UserRegisterCommandHandler
     //   // email: user.email,
     //   code,
     // });
+
+    const activeUntilTime = INTERVAL_1_DAY + new Date().getTime();
+
+    const userEmailConfirm = new UserEmailConfirm({
+      userId: user.id,
+      email: user.email,
+      code,
+      confirmed: false,
+      activeUntil: new Date(activeUntilTime),
+    });
+
+    this.em.persist([userEmailConfirm]);
+
     this._logger.verbose('generating tokens');
     // генерим токены
     const accessToken = this.userRepository.getAccessToken(user);

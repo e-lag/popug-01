@@ -12,7 +12,7 @@ export class UserLogin extends Identified {
   @Property()
   active: boolean; //        bool not null default true,
 
-  @Property()
+  @Property({ type: 'text' })
   refreshToken: string; // varchar not null,
 
   constructor(userLogin: Omit<UserLogin, keyof Identified>) {

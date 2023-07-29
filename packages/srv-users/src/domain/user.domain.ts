@@ -1,3 +1,5 @@
+import { Entity, Unique } from '@mikro-orm/core';
+
 import { User } from '../entities/user.entity';
 import {
   USER_AVATAR_SET_CASE,
@@ -16,6 +18,8 @@ import {
   UserPasswordSetCase,
 } from './cases';
 
+@Entity({ tableName: 'user' })
+@Unique({ properties: ['email'] })
 export class UserDomain
   extends User
   implements

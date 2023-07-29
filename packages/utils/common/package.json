@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "build:prod": "npm run clean && npx tsc",
-    "publish": "npm run build:prod",
+    "postinstall": "npm run build:prod",
+    "prepare": "npm run build:prod",
     "clean": "rimraf dist/ tsconfig.tsbuildinfo",
     "format": "eslint \"src/**/*.ts\" --fix",
     "lint": "eslint \"src/**/*.ts\""

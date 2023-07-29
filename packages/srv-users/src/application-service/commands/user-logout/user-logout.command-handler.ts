@@ -20,7 +20,7 @@ export class UserLogoutCommandHandler
     }
 
     const userLogin = await this.em.findOne(UserLogin, {
-      active: true,
+      active: false,
       refreshToken: command.token,
     });
 

@@ -1,11 +1,10 @@
 import { PrimaryKey, Property } from '@mikro-orm/core';
-import { UuidGenerator } from '@popug/utils-common';
 
 import type { Identifiable } from './identifiable';
 
 export abstract class Identified implements Identifiable {
   @PrimaryKey({ defaultRaw: 'uuid_generate_v4()', type: 'uuid' })
-  public id: string = UuidGenerator.generate();
+  public id!: string;
 
   @Property()
   public createdAt: Date = new Date();

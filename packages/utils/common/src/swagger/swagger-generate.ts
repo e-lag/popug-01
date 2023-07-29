@@ -17,10 +17,15 @@ export const swaggerGenerate = (
       port,
       appName,
       [
-        {
-          url: developPublicUrl,
-          descr: 'dev server',
-        },
+        ...(!developPublicUrl
+          ? []
+          : [
+              {
+                url: developPublicUrl,
+                descr: 'dev server',
+              },
+            ]),
+
         {
           url: `http://localhost:${port}/`,
           descr: 'localhost',

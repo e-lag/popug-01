@@ -29,11 +29,11 @@
   },
   "packageManager": "yarn@1.22.19",
   "dependencies": {
-    "@golevelup/nestjs-rabbitmq": "^3.6.1",
-    "@mikro-orm/core": "^5.7.12",
+    "@golevelup/nestjs-rabbitmq": "^4.0.0",
+    "@mikro-orm/core": "^5.7.14",
     "@mikro-orm/nestjs": "^5.2.0",
-    "@mikro-orm/migrations": "^5.7.12",
-    "@mikro-orm/postgresql": "^5.7.12",
+    "@mikro-orm/migrations": "^5.7.14",
+    "@mikro-orm/postgresql": "^5.7.14",
     "@nestjs/common": "^10.1.2",
     "@nestjs/config": "^3.0.0",
     "@nestjs/swagger": "7.1.4",
@@ -69,7 +69,7 @@
     "@popug/utils-micro-orm": "0.1.0"
   },
   "devDependencies": {
-    "@mikro-orm/cli": "^5.7.12",
+    "@mikro-orm/cli": "^5.7.14",
 
     "express": "^4.18.2"
   },

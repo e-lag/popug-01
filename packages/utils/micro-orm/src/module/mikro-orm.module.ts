@@ -1,6 +1,6 @@
 import { AnyEntity, EntityClass, EntityClassGroup, EntitySchema } from '@mikro-orm/core';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({})
@@ -21,6 +21,7 @@ export class UtilsMikroOrmModule {
               throw new Error(`ENV: '${env}' not found. Check '.env' file or server variables.`);
             }
 
+            Logger.verbose({ clientUrl }, 'MikroOrmModule');
             return {
               cache: {
                 enabled: false,
