@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { UserDomain } from '../../../domain/user.domain';
+import { User } from '../../../entities/user.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
 import { PasswordChangeCommand } from './password-change.command';
 
@@ -12,7 +12,7 @@ export class PasswordChangeCommandHandler
   constructor(private readonly em: EntityManager) {}
 
   public async execute(command: PasswordChangeCommand): Promise<void> {
-    const user = await this.em.findOne(UserDomain, { id: command.userId });
+    const user = await this.em.findOne(User, { id: command.userId });
 
     if (!user) {
       throw new Error(UserErrors.NotFound);

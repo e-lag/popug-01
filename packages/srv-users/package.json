@@ -64,6 +64,7 @@
     "zod-http-schemas": "^2.0.0",
     "zod-to-json-schema": "^3.21.2",
     "zod-endpoints": "^0.1.7",
+    "@popug/utils-auth": "0.1.0",
     "@popug/utils-common": "0.1.0",
     "@popug/utils-micro-orm": "0.1.0"
   },

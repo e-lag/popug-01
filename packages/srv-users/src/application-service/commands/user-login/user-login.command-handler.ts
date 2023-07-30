@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { UserDomain } from '../../../domain/user.domain';
+import { User } from '../../../entities/user.entity';
 import { UserLogin } from '../../../entities/user-login.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
 import { UserRepositoryAdapter } from '../../../infrastructure/user.repository-adapter';
@@ -25,7 +25,7 @@ export class UserLoginCommandHandler
     accessToken: string;
   }> {
     this._logger.verbose('execute');
-    const user = await this.em.findOne(UserDomain, { email: command.email });
+    const user = await this.em.findOne(User, { email: command.email });
 
     if (!user) {
       throw new Error(UserErrors.NotFound);
@@ -39,7 +39,7 @@ export class UserLoginCommandHandler
 
     if (!user.passwordIsCorrectCheck(command.password)) {
       user.errorLoginAdd();
-      this.em.flush();
+      await this.em.flush();
       throw new Error(UserErrors.IncorrectPassword);
     }
 
@@ -65,6 +65,7 @@ export class UserLoginCommandHandler
         emailConfirmed: user.emailConfirmed,
         nikName: user.nikName,
         phone: user.phone,
+        roles: user.roles,
       },
     };
   }

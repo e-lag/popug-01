@@ -1,3 +1,5 @@
+import { UserRoles } from './user-roles.enum';
+
 /**
  * Полезная нагрузка jwt токена
  */
@@ -10,6 +12,8 @@ export interface MobileJwtPayloadDto {
    * email
    */
   email: string;
+  /** Роли */
+  roles: UserRoles[];
   /**
    * Дата, до которой токен действителен
    */

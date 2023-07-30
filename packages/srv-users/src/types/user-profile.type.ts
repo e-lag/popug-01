@@ -7,4 +7,5 @@ export type UserProfile = {
   emailConfirmed: User['emailConfirmed'];
   nikName: User['nikName'];
   phone: User['phone'];
+  roles: User['roles'];
 };

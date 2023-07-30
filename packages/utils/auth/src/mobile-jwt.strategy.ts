@@ -4,6 +4,7 @@ import { JwtModuleOptions } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 
+import { AuthUser } from './auth.request';
 import { JWT_CONFIG } from './jwt-configuraiton';
 import { MobileJwtPayloadDto } from './mobile-jwt-payload.dto';
 
@@ -30,7 +31,7 @@ export class MobileJwtStrategy extends PassportStrategy(Strategy, 'mobile-jwt') 
    * Выполняет проверку пользователя по полезной нагрузке jwt токена
    * @param payload
    */
-  public validate(payload: MobileJwtPayloadDto): string {
-    return payload.sub;
+  public validate(payload: MobileJwtPayloadDto): AuthUser {
+    return { id: payload.sub, roles: payload.roles };
   }
 }

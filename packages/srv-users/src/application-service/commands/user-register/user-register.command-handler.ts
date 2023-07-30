@@ -3,8 +3,8 @@ import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { INTERVAL_1_DAY, UuidGenerator } from '@popug/utils-common';
 
-import { UserDomain } from '../../../domain/user.domain';
 import { RegisterResponseDto } from '../../../dtos';
+import { User } from '../../../entities/user.entity';
 import { UserEmailConfirm } from '../../../entities/user-email-confirm.entity';
 import { UserLogin } from '../../../entities/user-login.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
@@ -28,7 +28,7 @@ export class UserRegisterCommandHandler
   ): Promise<RegisterResponseDto> {
     this._logger.verbose('create user');
     // проверяем не занят ли email
-    const userWithEmail = await this.em.findOne(UserDomain, {
+    const userWithEmail = await this.em.findOne(User, {
       email: command.email,
     });
 
@@ -43,7 +43,7 @@ export class UserRegisterCommandHandler
 
     this._logger.verbose('all ok - creating');
     // создаем пользователя
-    const user = new UserDomain({
+    const user = new User({
       avatar: null,
       blockUntil: null,
       countErrorLogins: 0,
@@ -113,6 +113,7 @@ export class UserRegisterCommandHandler
         emailConfirmed: user.emailConfirmed,
         nikName: user.nikName,
         phone: user.phone,
+        roles: user.roles,
       },
     };
   }

@@ -2,11 +2,11 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModuleOptions } from '@nestjs/jwt/dist/interfaces/jwt-module-options.interface';
 import { PassportStrategy } from '@nestjs/passport';
+import { MobileJwtPayloadDto } from '@popug/utils-auth';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 
 import { UserFacade } from '../../application-service';
 import { JWT_CONFIG } from './jwt-configuraiton';
-import { MobileJwtPayloadDto } from './mobile-jwt-payload.dto';
 
 /**
  * Сервис JWT стратегии
@@ -31,9 +31,6 @@ export class MobileJwtStrategy extends PassportStrategy(
       ignoreExpiration: false,
       secretOrKey: jwtConfig?.publicKey || jwtConfig?.secretOrPrivateKey || '',
     });
-    // this.userRepository = this.moduleRef.get<UserRepositoryAdapter>(
-    //   UserRepositoryAdapter,
-    // );
   }
 
   /**

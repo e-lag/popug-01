@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { INTERVAL_1_DAY } from '@popug/utils-common';
 
-import { UserDomain } from '../../../domain/user.domain';
+import { User } from '../../../entities/user.entity';
 import { UserEmailConfirm } from '../../../entities/user-email-confirm.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
 import { UserRepositoryAdapter } from '../../../infrastructure/user.repository-adapter';
@@ -21,7 +21,7 @@ export class UserEmailChangeCommandHandler
   ) {}
 
   public async execute(command: UserEmailChangeCommand): Promise<void> {
-    const user = await this.em.findOne(UserDomain, { id: command.userId });
+    const user = await this.em.findOne(User, { id: command.userId });
 
     if (!user) {
       throw new Error(UserErrors.NotFound);
