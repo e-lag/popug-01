@@ -1,3 +1,4 @@
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -13,6 +14,7 @@ import {
 import { UserController } from './controlles/user.controller';
 import { UserLoginController } from './controlles/user-login.controller';
 import { REPOSITORY_ENTITIES } from './entities/repository.entities';
+import { USERS_EXCHANGES } from './events/users-exchanges';
 import { AuthService } from './infrastructure/auth/auth.service';
 import { JWT_CONFIG_FACTORY } from './infrastructure/auth/jwt-config.factory';
 import { MobileJwtStrategy } from './infrastructure/auth/mobile-jwt.strategy';
@@ -24,6 +26,11 @@ import { UserRepositoryAdapter } from './infrastructure/user.repository-adapter'
       isGlobal: true,
       load: [],
       envFilePath: '.env',
+    }),
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      exchanges: USERS_EXCHANGES,
+      uri: process.env.SRV_USERS_AMQP_URI ?? '',
+      connectionInitOptions: { wait: false },
     }),
     CqrsModule,
     PassportModule,

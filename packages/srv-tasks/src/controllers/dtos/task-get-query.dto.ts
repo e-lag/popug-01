@@ -4,7 +4,7 @@ import { IsNumber, Max, Min } from 'class-validator';
 
 const MAX_PAGE_SIZE = 100;
 
-export class VehiclesGetQueryDto {
+export class TaskGetQueryDto {
   @ApiProperty()
   @Max(MAX_PAGE_SIZE)
   @Min(1)

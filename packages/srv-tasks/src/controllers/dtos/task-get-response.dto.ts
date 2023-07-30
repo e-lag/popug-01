@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import { PaginationMetaDto } from './pagination-meta.dto';
-import { VehicleDto } from './vehicles.dto';
+import { TaskDto } from './task.dto';
 
 import { PaginationResponse } from './pagination-response.interface';
 
-export class VehiclesGetResponseDto implements PaginationResponse {
-  @ApiProperty({ type: () => VehicleDto, isArray: true })
-  public data!: VehicleDto[];
+export class TaskGetResponseDto implements PaginationResponse {
+  @ApiProperty({ type: () => TaskDto, isArray: true })
+  public data!: TaskDto[];
 
   @ApiProperty()
   public meta!: PaginationMetaDto;

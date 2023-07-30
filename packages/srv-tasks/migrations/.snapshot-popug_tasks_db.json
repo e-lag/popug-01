@@ -6,8 +6,38 @@
   "tables": [
     {
       "columns": {
-        "vin": {
-          "name": "vin",
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "uuid_generate_v4()",
+          "mappedType": "uuid"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz(0)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "title": {
+          "name": "title",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -15,8 +45,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "license_plate": {
-          "name": "license_plate",
+        "description": {
+          "name": "description",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -24,8 +54,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "brand": {
-          "name": "brand",
+        "assigner": {
+          "name": "assigner",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -33,35 +63,8 @@
           "nullable": false,
           "mappedType": "string"
         },
-        "model": {
-          "name": "model",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "make_model_year": {
-          "name": "make_model_year",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "dealer_name": {
-          "name": "dealer_name",
-          "type": "varchar(255)",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "string"
-        },
-        "dealer_address": {
-          "name": "dealer_address",
+        "price": {
+          "name": "price",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -70,13 +73,13 @@
           "mappedType": "string"
         }
       },
-      "name": "vehicle",
+      "name": "task",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "vehicle_pkey",
+          "keyName": "task_pkey",
           "columnNames": [
-            "vin"
+            "id"
           ],
           "composite": false,
           "primary": true,

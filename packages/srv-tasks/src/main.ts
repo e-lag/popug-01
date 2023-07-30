@@ -21,11 +21,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
     cors: { origin: '*' },
     logger: WinstonModule.createLogger(
-      LOGGER_CONFIG(
-        'srv_vehicles',
-        'SRV_VEHICLES_LOG_DIR',
-        'SRV_VEHICLES_LOGGER_DEBUG',
-      ),
+      LOGGER_CONFIG('srv_tasks', 'SRV_TASKS_LOG_DIR', 'SRV_TASKS_LOGGER_DEBUG'),
     ),
   });
   const configService = app.get(ConfigService);

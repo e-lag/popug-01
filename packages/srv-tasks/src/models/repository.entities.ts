@@ -1,3 +1,3 @@
-import { Vehicle } from './vehicle.entity';
+import { Task } from './task.entity';
 
-export const REPOSITORY_ENTITIES = [Vehicle];
+export const REPOSITORY_ENTITIES = [Task];

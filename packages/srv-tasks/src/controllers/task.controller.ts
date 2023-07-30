@@ -3,23 +3,23 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
 
-import { VehicleService } from '../domain/vehicle.service';
-import { VehiclesGetQueryDto, VehiclesGetResponseDto } from './dtos';
+import { TaskService } from '../domain/task.service';
+import { TaskGetQueryDto, TaskGetResponseDto } from './dtos';
 
-@ApiTags('vehicles')
+@ApiTags('tasks')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('mobile-jwt'))
 @Controller()
-export class VehicleController {
-  constructor(private readonly vehicleService: VehicleService) {}
+export class TaskController {
+  constructor(private readonly taskService: TaskService) {}
 
-  @ApiOkResponse({ type: VehiclesGetResponseDto })
+  @ApiOkResponse({ type: TaskGetResponseDto })
   @Get()
   public async vehicles(
-    @Query() query: VehiclesGetQueryDto,
-  ): Promise<VehiclesGetResponseDto> {
+    @Query() query: TaskGetQueryDto,
+  ): Promise<TaskGetResponseDto> {
     const { limit, offset } = query;
-    const result = await this.vehicleService.vehiclesGet(limit, offset);
+    const result = await this.taskService.list(limit, offset);
     return {
       data: result[0],
       meta: { total: result[1], limit, offset },

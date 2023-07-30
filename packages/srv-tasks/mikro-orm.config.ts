@@ -6,7 +6,7 @@ import { REPOSITORY_ENTITIES } from './src/models/repository.entities';
 const configService = new ConfigService();
 
 const MikroOrmConfig: MikroOrmModuleSyncOptions = {
-  clientUrl: configService.get('SRV_VEHICLES_POSTGRES_CONNECT_URL'),
+  clientUrl: configService.get('SRV_TASKS_DATABASE_URL'),
   entities: [...REPOSITORY_ENTITIES],
   type: 'postgresql',
   migrations: { disableForeignKeys: false },
