@@ -46,51 +46,23 @@ export class AppConfig implements IAppConfig {
   constructor(private configService: ConfigService) {
     this.appName = 'srv-users';
 
-    this.version = configService.get<string>(
-      'SRV_USER_APP_VERSION',
-      SRV_USER_APP_VERSION,
-    );
-    this.jsonLimit = configService.get<string>(
-      'SRV_USER_HTTP_JSON_LIMIT',
-      SRV_USER_HTTP_JSON_LIMIT,
-    );
+    this.version = configService.get<string>('SRV_USER_APP_VERSION', SRV_USER_APP_VERSION);
+    this.jsonLimit = configService.get<string>('SRV_USER_HTTP_JSON_LIMIT', SRV_USER_HTTP_JSON_LIMIT);
 
-    this.currentEnv = configService.get<'development' | 'production'>(
-      'SRV_USER_CURRENT_ENV',
-      SRV_USER_CURRENT_ENV,
-    );
-    this.developPublicUrl = configService.get<string>(
-      'SRV_USER_DEVELOP_PUBLIC_URL',
-      SRV_USER_DEVELOP_PUBLIC_URL,
-    );
-    this.jwtPublicKey = configService.get<string>(
-      'SRV_USER_JWT_PUBLIC_KEY',
-      SRV_USER_JWT_PUBLIC_KEY,
-    );
-    this.jwtSecretOrPrivateKey = configService.get<string>(
-      'SRV_USER_JWT_PRIVATE_KEY',
-      SRV_USER_PRIVATE_KEY,
-    );
-    this.port = configService.get<string>(
-      'SRV_USER_HTTP_PORT',
-      SRV_USER_HTTP_PORT,
-    );
-    this.isProduct =
-      configService.get<string>('SRV_USER_IS_PRODUCT', SRV_USER_IS_PRODUCT) ===
-      'true';
+    this.currentEnv = configService.get<'development' | 'production'>('SRV_USER_CURRENT_ENV', SRV_USER_CURRENT_ENV);
+    this.developPublicUrl = configService.get<string>('SRV_USER_DEVELOP_PUBLIC_URL', SRV_USER_DEVELOP_PUBLIC_URL);
+    this.jwtPublicKey = configService.get<string>('SRV_USER_JWT_PUBLIC_KEY', SRV_USER_JWT_PUBLIC_KEY);
+    this.jwtSecretOrPrivateKey = configService.get<string>('SRV_USER_JWT_PRIVATE_KEY', SRV_USER_PRIVATE_KEY);
+    this.port = configService.get<string>('SRV_USER_HTTP_PORT', SRV_USER_HTTP_PORT);
+    this.isProduct = configService.get<string>('SRV_USER_IS_PRODUCT', SRV_USER_IS_PRODUCT) === 'true';
 
     this.emails = this.emailsConfigGet();
   }
 
   private emailsConfigGet(): AppConfigEmail {
     return {
-      active:
-        this.configService.get<string>('SRV_USER_EMAILS_IS_ACTIVE', '') ===
-        'true',
-      notificationAddress: this.configService.get<string>(
-        'SRV_USER_EMAIL_NOTIFICATION',
-        SRV_USER_EMAIL_NOTIFICATIONS,
-      ),
+      active: this.configService.get<string>('SRV_USER_EMAILS_IS_ACTIVE', '') === 'true',
+      notificationAddress: this.configService.get<string>('SRV_USER_EMAIL_NOTIFICATION', SRV_USER_EMAIL_NOTIFICATIONS),
     };
   }
 }

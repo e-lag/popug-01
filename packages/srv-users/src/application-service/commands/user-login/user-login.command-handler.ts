@@ -10,15 +10,10 @@ import { UserProfile } from '../../../types/user-profile.type';
 import { UserLoginCommand } from './user-login.command';
 
 @CommandHandler(UserLoginCommand)
-export class UserLoginCommandHandler
-  implements ICommandHandler<UserLoginCommand>
-{
+export class UserLoginCommandHandler implements ICommandHandler<UserLoginCommand> {
   private _logger = new Logger(UserLoginCommandHandler.name);
 
-  constructor(
-    private readonly em: EntityManager,
-    private readonly userRepository: UserRepositoryAdapter,
-  ) {}
+  constructor(private readonly em: EntityManager, private readonly userRepository: UserRepositoryAdapter) {}
 
   public async execute(command: UserLoginCommand): Promise<{
     profile: UserProfile;
@@ -65,7 +60,7 @@ export class UserLoginCommandHandler
         emailConfirmed: user.emailConfirmed,
         nikName: user.nikName,
         phone: user.phone,
-        roles: user.roles,
+        role: user.role,
       },
     };
   }

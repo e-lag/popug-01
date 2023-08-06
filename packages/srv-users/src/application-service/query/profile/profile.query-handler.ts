@@ -23,7 +23,7 @@ export class ProfileQueryHandler implements IQueryHandler<ProfileQuery> {
       emailConfirmed: user.emailConfirmed,
       nikName: user.nikName,
       phone: user.phone,
-      roles: user.roles,
+      role: user.role,
     };
   }
 }

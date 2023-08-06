@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiBadRequestResponse,
@@ -16,15 +8,10 @@ import {
   ApiHeaders,
   ApiTags,
 } from '@nestjs/swagger';
-import { ApiOkWrappedResponse } from '@popug/utils-common';
+import { ApiOkWrappedResponse } from '@popug/common';
 
 import { UserFacade } from '../application-service';
-import {
-  LoginRequestDto,
-  LoginResponseDto,
-  RegisterRequestDto,
-  RegisterResponseDto,
-} from '../dtos';
+import { LoginRequestDto, LoginResponseDto, RegisterRequestDto, RegisterResponseDto } from '../dtos';
 import { EmptyResponseDto } from '../dtos/empty-response.dto';
 import { AuthRequest } from '../infrastructure/auth/auth.request';
 import { UserErrors } from '../infrastructure/user.errors';
@@ -38,9 +25,7 @@ export class UserLoginController {
   @ApiConflictResponse({ description: UserErrors.EmailIsBusy })
   @ApiBadRequestResponse({ description: 'Other errors' })
   @Post('register')
-  private async register(
-    @Body() body: RegisterRequestDto,
-  ): Promise<RegisterResponseDto> {
+  private async register(@Body() body: RegisterRequestDto): Promise<RegisterResponseDto> {
     return this.userFacade
       .register(body.email, body.password, body.passwordConfirm, body.deviceId)
       .catch((err: Error) => {
@@ -56,22 +41,18 @@ export class UserLoginController {
   @ApiForbiddenResponse({ description: UserErrors.AccountBlocked })
   @ApiBadRequestResponse({ description: 'Other errors' })
   @Post('login')
-  private async login(
-    @Body() body: LoginRequestDto,
-  ): Promise<LoginResponseDto> {
-    return this.userFacade
-      .login(body.email, body.password)
-      .catch((err: Error) => {
-        if (err.message === UserErrors.NotFound) {
-          throw new HttpException(err.message, HttpStatus.NOT_FOUND);
-        }
+  private async login(@Body() body: LoginRequestDto): Promise<LoginResponseDto> {
+    return this.userFacade.login(body.email, body.password).catch((err: Error) => {
+      if (err.message === UserErrors.NotFound) {
+        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      }
 
-        if (err.message === UserErrors.AccountBlocked) {
-          throw new HttpException(err.message, HttpStatus.FORBIDDEN);
-        }
+      if (err.message === UserErrors.AccountBlocked) {
+        throw new HttpException(err.message, HttpStatus.FORBIDDEN);
+      }
 
-        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      });
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    });
   }
 
   @ApiBearerAuth()
@@ -82,6 +63,6 @@ export class UserLoginController {
   private async logout(@Req() request: AuthRequest): Promise<void> {
     const authorization = (request.headers.Authorization as string) || '';
     const token = authorization.split(' ')[1];
-    return this.userFacade.logout(request.user, token);
+    return this.userFacade.logout(request.user.id, token);
   }
 }

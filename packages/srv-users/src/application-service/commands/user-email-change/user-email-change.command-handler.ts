@@ -1,7 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { INTERVAL_1_DAY } from '@popug/utils-common';
+import { INTERVAL_1_DAY } from '@popug/common';
 
 import { User } from '../../../entities/user.entity';
 import { UserEmailConfirm } from '../../../entities/user-email-confirm.entity';
@@ -10,15 +10,10 @@ import { UserRepositoryAdapter } from '../../../infrastructure/user.repository-a
 import { UserEmailChangeCommand } from './user-email-change.command';
 
 @CommandHandler(UserEmailChangeCommand)
-export class UserEmailChangeCommandHandler
-  implements ICommandHandler<UserEmailChangeCommand>
-{
+export class UserEmailChangeCommandHandler implements ICommandHandler<UserEmailChangeCommand> {
   private _logger = new Logger(UserEmailChangeCommandHandler.name);
 
-  constructor(
-    private readonly userRepository: UserRepositoryAdapter,
-    private readonly em: EntityManager,
-  ) {}
+  constructor(private readonly userRepository: UserRepositoryAdapter, private readonly em: EntityManager) {}
 
   public async execute(command: UserEmailChangeCommand): Promise<void> {
     const user = await this.em.findOne(User, { id: command.userId });

@@ -1,4 +1,4 @@
-import { AppConfigCommon } from '@popug/utils-common';
+import { AppConfigCommon } from '@popug/common';
 
 /**
  * Интерфейс настроек приложения

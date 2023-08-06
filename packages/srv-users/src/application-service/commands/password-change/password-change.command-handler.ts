@@ -6,9 +6,7 @@ import { UserErrors } from '../../../infrastructure/user.errors';
 import { PasswordChangeCommand } from './password-change.command';
 
 @CommandHandler(PasswordChangeCommand)
-export class PasswordChangeCommandHandler
-  implements ICommandHandler<PasswordChangeCommand>
-{
+export class PasswordChangeCommandHandler implements ICommandHandler<PasswordChangeCommand> {
   constructor(private readonly em: EntityManager) {}
 
   public async execute(command: PasswordChangeCommand): Promise<void> {

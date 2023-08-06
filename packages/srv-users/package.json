@@ -9,14 +9,14 @@
   "scripts": {
     "build": "nest build -p tsconfig.json",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "users:start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "format": "eslint \"src/**/*.ts\" --fix",
     "lint": "eslint \"src/**/*.ts\"",
-    "migration:create": "npx mikro-orm migration:create",
-    "migration:down": "npx mikro-orm migration:down",
     "migration:up": "npx mikro-orm migration:up",
+    "migration:down": "npx mikro-orm migration:down",
+    "migration:create": "npx mikro-orm migration:create",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
@@ -64,9 +64,8 @@
     "zod-http-schemas": "^2.0.0",
     "zod-to-json-schema": "^3.21.2",
     "zod-endpoints": "^0.1.7",
-    "@popug/utils-auth": "0.1.0",
-    "@popug/utils-common": "0.1.0",
-    "@popug/utils-micro-orm": "0.1.0"
+    "@popug/common": "0.1.0",
+    "@popug/contracts": "0.1.0"
   },
   "devDependencies": {
     "handlebars": "^4.7.7",

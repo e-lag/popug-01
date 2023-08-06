@@ -1,3 +1,6 @@
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
 import {
   LOGGER_CONFIG,
   LongRequestInterceptor,
@@ -5,10 +8,7 @@ import {
   swaggerGenerate,
   TransformInterceptor,
   WrapResponseInterceptor,
-} from '@popug/utils-common';
-import { Logger, ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
+} from '@popug/common';
 import helmet from 'helmet';
 import { WinstonModule } from 'nest-winston';
 
@@ -21,11 +21,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
     cors: { origin: '*' },
     logger: WinstonModule.createLogger(
-      LOGGER_CONFIG(
-        'srv_vehicles',
-        'SRV_VEHICLES_LOG_DIR',
-        'SRV_VEHICLES_LOGGER_DEBUG',
-      ),
+      LOGGER_CONFIG('srv_vehicles', 'SRV_VEHICLES_LOG_DIR', 'SRV_VEHICLES_LOGGER_DEBUG'),
     ),
   });
   const configService = app.get(ConfigService);
@@ -61,9 +57,7 @@ async function bootstrap(): Promise<void> {
   });
   // listen
   await app.listen(environment.config.port);
-  logger.log(
-    `Application version ${environment.config.version} start on http://localhost:${environment.config.port}/`,
-  );
+  logger.log(`Application version ${environment.config.version} start on http://localhost:${environment.config.port}/`);
 }
 
 bootstrap();

@@ -1,5 +1,5 @@
 import { Entity, Property } from '@mikro-orm/core';
-import { Identified } from '@popug/utils-micro-orm';
+import { Identified } from '@popug/common';
 
 @Entity()
 export class UserLogin extends Identified {

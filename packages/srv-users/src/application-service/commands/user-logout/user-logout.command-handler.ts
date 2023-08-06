@@ -7,9 +7,7 @@ import { UserErrors } from '../../../infrastructure/user.errors';
 import { UserLogoutCommand } from './user-logout.command';
 
 @CommandHandler(UserLogoutCommand)
-export class UserLogoutCommandHandler
-  implements ICommandHandler<UserLogoutCommand>
-{
+export class UserLogoutCommandHandler implements ICommandHandler<UserLogoutCommand> {
   constructor(private readonly em: EntityManager) {}
 
   public async execute(command: UserLogoutCommand): Promise<void> {

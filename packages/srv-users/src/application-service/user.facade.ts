@@ -16,10 +16,7 @@ import { ProfileQuery } from './query/profile/profile.query';
 
 @Injectable()
 export class UserFacade {
-  constructor(
-    private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
-  ) {}
+  constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) {}
 
   public register(
     email: User['email'],
@@ -27,19 +24,11 @@ export class UserFacade {
     passwordConfirm: string,
     deviceId: string,
   ): Promise<RegisterResponseDto> {
-    return this.commandBus.execute(
-      new UserRegisterCommand(email, password, passwordConfirm, deviceId),
-    );
+    return this.commandBus.execute(new UserRegisterCommand(email, password, passwordConfirm, deviceId));
   }
 
-  public emailConfirm(
-    userId: User['id'],
-    email: string,
-    confirmCode: string,
-  ): Promise<void> {
-    return this.commandBus.execute<EmailConfirmCommand, void>(
-      new EmailConfirmCommand(userId, email, confirmCode),
-    );
+  public emailConfirm(userId: User['id'], email: string, confirmCode: string): Promise<void> {
+    return this.commandBus.execute<EmailConfirmCommand, void>(new EmailConfirmCommand(userId, email, confirmCode));
   }
 
   public changePassword(
@@ -48,14 +37,7 @@ export class UserFacade {
     passwordNew: string,
     passwordNewConfirm: string,
   ): Promise<void> {
-    return this.commandBus.execute(
-      new PasswordChangeCommand(
-        userId,
-        passwordCurrent,
-        passwordNew,
-        passwordNewConfirm,
-      ),
-    );
+    return this.commandBus.execute(new PasswordChangeCommand(userId, passwordCurrent, passwordNew, passwordNewConfirm));
   }
 
   public nikNameChange(userId: User['id'], nikName: string): Promise<void> {

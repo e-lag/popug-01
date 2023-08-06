@@ -1,15 +1,14 @@
 import { EntityManager } from '@mikro-orm/postgresql';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 
 import { User } from '../../../entities/user.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
+import { UserChangedEvent } from '../../events-cud/user-changed/user-changed.event';
 import { AvatarAddCommand } from './avatar-add.command';
 
 @CommandHandler(AvatarAddCommand)
-export class AvatarAddCommandHandler
-  implements ICommandHandler<AvatarAddCommand>
-{
-  constructor(private readonly em: EntityManager) {}
+export class AvatarAddCommandHandler implements ICommandHandler<AvatarAddCommand> {
+  constructor(private readonly em: EntityManager, private readonly eventBus: EventBus) {}
 
   public async execute(command: AvatarAddCommand): Promise<void> {
     // const user = await this.userSrv.user(command.userId);
@@ -22,5 +21,6 @@ export class AvatarAddCommandHandler
     user.avatar = command.avatar;
 
     await this.em.flush();
+    this.eventBus.publish(new UserChangedEvent(user));
   }
 }

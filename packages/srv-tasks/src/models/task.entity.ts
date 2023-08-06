@@ -1,5 +1,7 @@
-import { Entity, Property } from '@mikro-orm/core';
-import { Identified } from '@popug/utils-micro-orm';
+import { Entity, ManyToOne, Property } from '@mikro-orm/core';
+import { Identified, User } from '@popug/common';
+
+import { TaskStatuses } from '../infrastructure/task-statuses.enum';
 
 @Entity()
 export class Task extends Identified {
@@ -9,11 +11,14 @@ export class Task extends Identified {
   @Property({ nullable: false })
   public description: string;
 
-  @Property({ nullable: false })
-  public assigner: string;
+  @ManyToOne()
+  public assigner: User;
 
   @Property({ nullable: false })
   public price: string;
+
+  @Property({ nullable: false })
+  public status: TaskStatuses;
 
   constructor(props: Omit<Task, keyof Identified>) {
     super();
@@ -21,5 +26,6 @@ export class Task extends Identified {
     this.description = props.description;
     this.assigner = props.assigner;
     this.price = props.price;
+    this.status = props.status;
   }
 }

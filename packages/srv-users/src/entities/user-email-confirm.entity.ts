@@ -1,27 +1,27 @@
 import { Entity, Property } from '@mikro-orm/core';
-import { Identified } from '@popug/utils-micro-orm';
+import { Identified } from '@popug/common';
 
 @Entity()
 export class UserEmailConfirm extends Identified {
   // @PrimaryKey()
   // id: string; //       uuid        not null,
 
-  @Property({ nullable: false })
+  @Property()
   userId: string; //  uuid not null
 
-  @Property({ nullable: false })
+  @Property()
   email: string; //    varchar     not null,
 
-  @Property({ nullable: false })
+  @Property()
   code: string; //     varchar     not null,
 
-  @Property({ nullable: false })
+  @Property()
   activeUntil: Date; //    TIMESTAMPTZ not null,
 
-  @Property({ nullable: false })
+  @Property()
   confirmed: boolean; // bool        not null default false,
 
-  // @Property({ nullable: false })
+  // @Property()
   // createAt: Date = new Date(); // TIMESTAMPTZ           NOT NULL default now(),
 
   constructor(userEmailConfirm: Omit<UserEmailConfirm, keyof Identified>) {

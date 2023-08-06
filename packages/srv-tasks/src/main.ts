@@ -8,7 +8,7 @@ import {
   swaggerGenerate,
   TransformInterceptor,
   WrapResponseInterceptor,
-} from '@popug/utils-common';
+} from '@popug/common';
 import helmet from 'helmet';
 import { WinstonModule } from 'nest-winston';
 
@@ -20,9 +20,7 @@ async function bootstrap(): Promise<void> {
   // dotenv.config();
   const app = await NestFactory.create(AppModule, {
     cors: { origin: '*' },
-    logger: WinstonModule.createLogger(
-      LOGGER_CONFIG('srv_tasks', 'SRV_TASKS_LOG_DIR', 'SRV_TASKS_LOGGER_DEBUG'),
-    ),
+    logger: WinstonModule.createLogger(LOGGER_CONFIG('srv_tasks', 'SRV_TASKS_LOG_DIR', 'SRV_TASKS_LOGGER_DEBUG')),
   });
   const configService = app.get(ConfigService);
   const logger = app.get(Logger);
@@ -57,9 +55,7 @@ async function bootstrap(): Promise<void> {
   });
   // listen
   await app.listen(environment.config.port);
-  logger.log(
-    `Application version ${environment.config.version} start on http://localhost:${environment.config.port}/`,
-  );
+  logger.log(`Application version ${environment.config.version} start on http://localhost:${environment.config.port}/`);
 }
 
 bootstrap();

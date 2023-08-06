@@ -6,7 +6,7 @@ import { UserProfile } from '../types/user-profile.type';
 
 export class UserProfileDto implements UserProfile {
   @ApiProperty({ type: String, nullable: true })
-  public avatar!: string | null;
+  public avatar!: User['avatar'];
 
   @ApiProperty({ type: String, nullable: false })
   public email!: User['email'];
@@ -20,6 +20,6 @@ export class UserProfileDto implements UserProfile {
   @ApiProperty({ type: String, nullable: true })
   public phone!: User['phone'];
 
-  @ApiProperty({ type: number, isArray: true, nullable: true })
-  public roles!: User['roles'];
+  @ApiProperty({ type: number, nullable: false })
+  public role!: User['role'];
 }

@@ -18,8 +18,7 @@ export class UserRepositoryAdapter {
 
   public userEmailConfirmCodeGenerate(): string {
     const maxValue = 9;
-    const codeGen = (): string =>
-      Math.round(Math.random() * maxValue).toString();
+    const codeGen = (): string => Math.round(Math.random() * maxValue).toString();
     return Array.from({ length: 6 })
       .map(() => codeGen())
       .join('');

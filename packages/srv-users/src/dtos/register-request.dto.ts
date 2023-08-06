@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, IsStrongPassword } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 // import { Match } from '../infrastructure/validators';
 
@@ -9,17 +9,16 @@ export class RegisterRequestDto {
   public email!: string;
 
   @ApiProperty({ name: 'password' })
-  @IsStrongPassword()
   @IsString()
+  // @IsStrongPassword()
   public password!: string;
 
   @ApiProperty({
     name: 'passwordConfirm',
     description: 'password confirmation',
   })
-  @IsStrongPassword()
   @IsString()
-  // @Match('password', { message: 'password not match' })
+  // @IsStrongPassword()
   public passwordConfirm!: string;
 
   @ApiProperty({ name: 'deviceId' })

@@ -1,16 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpException,
-  HttpStatus,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { ApiOkWrappedResponse } from '@popug/utils-common';
+import { ApiOkWrappedResponse } from '@popug/common';
 
 import { UserFacade } from '../application-service';
 import { UserProfileDto } from '../dtos';
@@ -30,64 +21,39 @@ export class UserController {
 
   @ApiOkWrappedResponse(UserProfileDto)
   @Get('profile')
-  private async profileGet(
-    @Req() request: AuthRequest,
-  ): Promise<UserProfileDto> {
-    return this.userFacade.profile(request.user);
+  private async profileGet(@Req() request: AuthRequest): Promise<UserProfileDto> {
+    return this.userFacade.profile(request.user.id);
   }
 
   @ApiOkWrappedResponse(EmptyResponseDto)
   @Post('emailConfirm')
-  private async emailConfirm(
-    @Req() request: AuthRequest,
-    @Body() body: EmailConfirmRequestBodyDto,
-  ): Promise<void> {
-    return this.userFacade
-      .emailConfirm(request.user, body.email, body.confirmCode)
-      .catch((err: Error) => {
-        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      });
+  private async emailConfirm(@Req() request: AuthRequest, @Body() body: EmailConfirmRequestBodyDto): Promise<void> {
+    return this.userFacade.emailConfirm(request.user.id, body.email, body.confirmCode).catch((err: Error) => {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    });
   }
 
   @ApiOkWrappedResponse(EmptyResponseDto)
   @Post('emailChange')
-  private async emailChange(
-    @Req() request: AuthRequest,
-    @Body() body: EmailChangeRequestBodyDto,
-  ): Promise<void> {
-    return this.userFacade
-      .emailChange(request.user, body.email)
-      .catch((err: Error) => {
-        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      });
+  private async emailChange(@Req() request: AuthRequest, @Body() body: EmailChangeRequestBodyDto): Promise<void> {
+    return this.userFacade.emailChange(request.user.id, body.email).catch((err: Error) => {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    });
   }
 
   @ApiOkWrappedResponse(EmptyResponseDto)
   @Post('nikNameChange')
-  private async nikNameChange(
-    @Req() request: AuthRequest,
-    @Body() body: NikNameChangeRequestBodyDto,
-  ): Promise<void> {
-    return this.userFacade
-      .nikNameChange(request.user, body.nikName)
-      .catch((err: Error) => {
-        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      });
+  private async nikNameChange(@Req() request: AuthRequest, @Body() body: NikNameChangeRequestBodyDto): Promise<void> {
+    return this.userFacade.nikNameChange(request.user.id, body.nikName).catch((err: Error) => {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+    });
   }
 
   @ApiOkWrappedResponse(EmptyResponseDto)
   @Post('passwordChange')
-  private async passwordChange(
-    @Req() request: AuthRequest,
-    @Body() body: PasswordChangeRequestDto,
-  ): Promise<void> {
+  private async passwordChange(@Req() request: AuthRequest, @Body() body: PasswordChangeRequestDto): Promise<void> {
     return this.userFacade
-      .changePassword(
-        request.user,
-        body.passwordCurrent,
-        body.passwordNew,
-        body.passwordNewConfirm,
-      )
+      .changePassword(request.user.id, body.passwordCurrent, body.passwordNew, body.passwordNewConfirm)
       .catch((err: Error) => {
         throw new HttpException(err.message, HttpStatus.OK);
       });

@@ -4,13 +4,11 @@ import { ConfigModule } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { UtilsMikroOrmModule } from '@popug/utils-micro-orm';
+import { UtilsMikroOrmModule } from '@popug/common';
 
-import {
-  USER_COMMAND_HANDLERS,
-  USER_QUERY_HANDLERS,
-  UserFacade,
-} from './application-service';
+import { USER_COMMAND_HANDLERS, USER_QUERY_HANDLERS, UserFacade } from './application-service';
+import { USER_EVENT_HANDLERS } from './application-service/events/user-event-handlres.const';
+import { USER_CUD_EVENT_HANDLERS } from './application-service/events-cud/user-cud-event-handlres.const';
 import { UserController } from './controlles/user.controller';
 import { UserLoginController } from './controlles/user-login.controller';
 import { REPOSITORY_ENTITIES } from './entities/repository.entities';
@@ -29,8 +27,8 @@ import { UserRepositoryAdapter } from './infrastructure/user.repository-adapter'
     }),
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: USERS_EXCHANGES,
-      uri: process.env.SRV_USERS_AMQP_URI ?? '',
-      connectionInitOptions: { wait: false },
+      uri: process.env.SRV_USER_AMQP_URI ?? '',
+      connectionInitOptions: { wait: true },
     }),
     CqrsModule,
     PassportModule,
@@ -45,6 +43,8 @@ import { UserRepositoryAdapter } from './infrastructure/user.repository-adapter'
     UserFacade,
     ...USER_COMMAND_HANDLERS,
     ...USER_QUERY_HANDLERS,
+    ...USER_EVENT_HANDLERS,
+    ...USER_CUD_EVENT_HANDLERS,
     Logger,
   ],
 })

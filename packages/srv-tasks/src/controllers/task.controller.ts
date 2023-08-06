@@ -1,16 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { ApiOkResponse } from '@nestjs/swagger/dist/decorators/api-response.decorator';
-import { AuthRequest } from '@popug/utils-auth/dist/auth.request';
+import { AuthRequest } from '@popug/common';
 
 import { TaskService } from '../domain/task.service';
 import { TaskGetQueryDto, TaskGetResponseDto } from './dtos';
@@ -38,10 +30,7 @@ export class TaskController {
 
   // @ApiOkResponse({ type: TaskGetResponseDto })
   @Post()
-  public async create(
-    @Body() body: unknown,
-    @Req() { user }: AuthRequest,
-  ): Promise<unknown> {
+  public async create(@Body() body: unknown, @Req() { user }: AuthRequest): Promise<unknown> {
     const result = await this.taskService.create(body, user);
     return {
       meta: result,
@@ -50,11 +39,7 @@ export class TaskController {
 
   // @ApiOkResponse({ type: TaskGetResponseDto })
   @Post('assign')
-  public async assign(
-    @Query() query: unknown,
-    @Body() body: unknown,
-    @Req() { user }: AuthRequest,
-  ): Promise<unknown> {
+  public async assign(@Query() query: unknown, @Body() body: unknown, @Req() { user }: AuthRequest): Promise<unknown> {
     const result = await this.taskService.assign(query, {
       body,
       user,
