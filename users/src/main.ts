@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 import * as process from 'process';
 import { AppModule } from './app.module';
-import { swaggerGenerate } from './common/swagger';
+import { swaggerGenerate } from './infrastructure/swagger';
 
 async function bootstrap() {
   dotenv.config();

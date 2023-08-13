@@ -3,7 +3,7 @@ import { UserRoles } from '../types/user-roles.enum';
 
 @Entity({ tableName: 'user' })
 export class User {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid' })
   public id: string;
 
   @Property({ nullable: true })

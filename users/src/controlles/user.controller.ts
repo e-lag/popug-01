@@ -12,12 +12,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { UserFacade } from '../application-service';
-import { AuthRequest } from '../auth/auth.request';
 import { UserProfileDto } from '../dtos';
 import { EmailChangeRequestBodyDto } from '../dtos/email-change-request-body.dto';
 import { EmailConfirmRequestBodyDto } from '../dtos/email-confirm-request-body.dto';
 import { NikNameChangeRequestBodyDto } from '../dtos/nik-name-change-request-body.dto';
 import { PasswordChangeRequestDto } from '../dtos/password-change-request.dto';
+import { AuthRequest } from '../infrastructure/auth/auth.request';
 
 @ApiTags('users')
 @ApiBearerAuth()

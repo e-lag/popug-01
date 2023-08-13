@@ -1,12 +1,12 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
-import { UuidGenerator } from '../../../common/uuid.generator';
 
 import { RegisterResponseDto } from '../../../dtos';
 import { User } from '../../../enitities/user.entity';
 import { UserErrors } from '../../../infrastructure/user.errors';
 import { UserRepositoryAdapter } from '../../../infrastructure/user.repository-adapter';
+import { UuidGenerator } from '../../../infrastructure/uuid.generator';
 import { UserRoles } from '../../../types/user-roles.enum';
 import { UserCreatedEvent } from '../../events-cud/user-created/user-created.event';
 import { UserRegisterCommand } from './user-register.command';

@@ -1,11 +1,11 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { CudTypeEvents } from '../../../contracts/cud-type-events.enum';
+import { CudTypeEvents } from '../../../infrastructure/contracts/cud-type-events.enum';
 import {
   USERS_FANOUT_EXCHANGE,
   UserUpdateStreamEventDto,
-} from '../../../contracts/users-stream';
+} from '../../../infrastructure/contracts/users-stream';
 
 import { UserChangedEvent } from './user-changed.event';
 

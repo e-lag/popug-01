@@ -10,7 +10,7 @@ async function bootstrap() {
   const PORT = process.env['HTTP_PORT'] || '3702';
   const app = await NestFactory.create(AppModule);
   swaggerGenerate(app, {
-    appName: 'users',
+    appName: 'Tasks',
     port: PORT,
     version: '1',
     developPublicUrl: undefined,
