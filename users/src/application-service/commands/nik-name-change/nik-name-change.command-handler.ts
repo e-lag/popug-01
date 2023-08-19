@@ -3,7 +3,7 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { User } from '../../../enitities/user.entity';
 
 import { UserErrors } from '../../../infrastructure/user.errors';
-import { UserChangedEvent } from '../../events-cud/user-changed/user-changed.event';
+import { UserChangedEvent } from '../../events-streaming/user-changed/user-changed.event';
 import { NikNameChangeCommand } from './nik-name-change.command';
 
 @CommandHandler(NikNameChangeCommand)

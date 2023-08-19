@@ -6,6 +6,7 @@ import { UserEmailChangeCommandHandler } from './user-email-change/user-email-ch
 import { UserLoginCommandHandler } from './user-login/user-login.command-handler';
 import { UserLogoutCommandHandler } from './user-logout/user-logout.command-handler';
 import { UserRegisterCommandHandler } from './user-register/user-register.command-handler';
+import { UserRoleChangeCommandHandler } from './user-role-change/user-role-change.command-handler';
 
 export const USER_COMMAND_HANDLERS = [
   AvatarAddCommandHandler,
@@ -16,4 +17,5 @@ export const USER_COMMAND_HANDLERS = [
   UserRegisterCommandHandler,
   UserLogoutCommandHandler,
   UserEmailChangeCommandHandler,
+  UserRoleChangeCommandHandler,
 ];

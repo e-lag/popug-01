@@ -5,17 +5,17 @@ import {
   TASK_ASSIGNED_EVENT_CONFIG,
   TaskAssignedEventPayload,
 } from '../../../infrastructure/contracts/tasks-events';
-import { TaskAssignerSetEvent } from './task-assigner-set.event';
+import { TaskAssignedEvent } from './task-assigned.event';
 
-@EventsHandler(TaskAssignerSetEvent)
-export class TaskAssignerSetEventHandler
-  implements IEventHandler<TaskAssignerSetEvent>
+@EventsHandler(TaskAssignedEvent)
+export class TaskAssignedEventHandler
+  implements IEventHandler<TaskAssignedEvent>
 {
-  private _logger = new Logger(TaskAssignerSetEventHandler.name);
+  private _logger = new Logger(TaskAssignedEventHandler.name);
 
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  public async handle(event: TaskAssignerSetEvent): Promise<void> {
+  public async handle(event: TaskAssignedEvent): Promise<void> {
     this._logger.log({ event });
     const { task } = event;
 

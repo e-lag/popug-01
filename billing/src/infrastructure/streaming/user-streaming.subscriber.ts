@@ -20,13 +20,14 @@ export class UserStreamingSubscriber {
     queue: USERS_FANOUT_EXCHANGE.name + '-billing-srv',
   })
   public async userCudEvents(event: UserStreamEvent): Promise<void> {
+    const em = this.em.fork();
     switch (event.operation) {
       case CudTypeEvents.CREATE:
-        this.em.create(User, this.userEntityGet(event.data));
-        await this.em.flush();
+        em.create(User, this.userEntityGet(event.data));
+        await em.flush();
         return;
       case CudTypeEvents.UPDATE:
-        await this.em.nativeUpdate(
+        await em.nativeUpdate(
           User,
           { id: event.id },
           this.userEntityGet(event.data),

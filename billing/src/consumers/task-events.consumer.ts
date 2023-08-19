@@ -23,7 +23,7 @@ export class TaskEventsConsumer {
       TASK_ASSIGNED_EVENT_CONFIG.routingKey,
   })
   async taskAssigned(payload: TaskAssignedEventPayload) {
-    await this.commandBus.execute(new TaskFinishedCommand(payload));
+    await this.commandBus.execute(new TaskAssignedCommand(payload));
   }
 
   @RabbitSubscribe({
@@ -35,6 +35,6 @@ export class TaskEventsConsumer {
       TASK_FINISHED_EVENT_CONFIG.routingKey,
   })
   async taskFinished(payload: TaskFinishedEventPayload) {
-    await this.commandBus.execute(new TaskAssignedCommand(payload));
+    await this.commandBus.execute(new TaskFinishedCommand(payload));
   }
 }

@@ -1,28 +1,29 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { CudTypeEvents } from '../../../infrastructure/contracts/cud-type-events.enum';
+import { StreamEventTypes } from '../../../infrastructure/contracts/cud-type-events.enum';
 import {
+  UserCreateStreamEventDto,
   USERS_FANOUT_EXCHANGE,
-  UserUpdateStreamEventDto,
 } from '../../../infrastructure/contracts/users-stream';
 
-import { UserChangedEvent } from './user-changed.event';
+import { UserCreatedEvent } from './user-created.event';
 
-@EventsHandler(UserChangedEvent)
-export class UserChangedEventHandler
-  implements IEventHandler<UserChangedEvent>
+@EventsHandler(UserCreatedEvent)
+export class UserCreatedEventHandler
+  implements IEventHandler<UserCreatedEvent>
 {
-  private _logger = new Logger(UserChangedEventHandler.name);
+  private _logger = new Logger(UserCreatedEventHandler.name);
 
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  public async handle(event: UserChangedEvent): Promise<void> {
+  public async handle(event: UserCreatedEvent): Promise<void> {
     this._logger.log({ event });
     const { user } = event;
-    const userEvent: UserUpdateStreamEventDto = {
+    //| UserUpdateCudEventDto
+    const userEvent: UserCreateStreamEventDto = {
       id: user.id,
-      operation: CudTypeEvents.UPDATE,
+      operation: StreamEventTypes.CREATE,
       data: {
         id: user.id,
         email: user.email,
@@ -37,7 +38,7 @@ export class UserChangedEventHandler
     };
     await this.amqpConnection.publish(
       USERS_FANOUT_EXCHANGE.name,
-      '',
+      userEvent.operation,
       userEvent,
     );
   }

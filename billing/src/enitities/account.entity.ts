@@ -1,13 +1,14 @@
 import {
   Collection,
   Entity,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryKey,
   Property,
   Ref,
 } from '@mikro-orm/core';
-import { Task } from './task.entity';
+import { AccountAssignedTask } from './account-assigned-task.entity';
+import { AccountFinishedTask } from './account-finished-task.entity';
 import { User } from './user.entity';
 
 @Entity()
@@ -21,14 +22,20 @@ export class Account {
   @ManyToOne(() => User)
   public assigner: Ref<User>;
 
-  @ManyToMany(() => Task)
-  public assignedTasks: Collection<Task>;
+  @OneToMany(() => AccountAssignedTask, (task) => task.account)
+  public assignedTasks: Collection<AccountAssignedTask>;
 
-  @ManyToMany(() => Task)
-  public finishedTasks: Collection<Task>;
+  @OneToMany(() => AccountFinishedTask, (task) => task.account)
+  public finishedTasks: Collection<AccountFinishedTask>;
 
   @Property()
   public balance: number;
+
+  @Property()
+  public assignSum: number;
+
+  @Property()
+  public finishSum: number;
 
   @Property()
   public close: boolean;
@@ -39,15 +46,9 @@ export class Account {
   @Property()
   public reportSend: boolean;
 
-  constructor(props: Account) {
-    this.id = props.id;
-    this.day = props.day;
-    this.assigner = props.assigner;
-    this.assignedTasks = props.assignedTasks;
-    this.finishedTasks = props.finishedTasks;
-    this.balance = props.balance;
-    this.close = props.close;
-    this.paid = props.paid;
-    this.reportSend = props.reportSend;
-  }
+  @Property({ nullable: true })
+  public mostExpensiveTask?: number | undefined;
+
+  @Property({ nullable: true })
+  public mostChipTask?: number | undefined;
 }

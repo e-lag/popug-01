@@ -18,13 +18,14 @@ export class TaskStreamingSubscriber {
     queue: TASKS_FANOUT_EXCHANGE.name + 'billing-srv',
   })
   public async taskCudEvents(event: TaskStreamEvent): Promise<void> {
+    const em = this.em.fork();
     switch (event.operation) {
       case CudTypeEvents.CREATE:
-        this.em.create(Task, event.data);
-        await this.em.flush();
+        em.create(Task, event.data);
+        await em.flush();
         return;
       case CudTypeEvents.UPDATE:
-        await this.em.nativeUpdate(Task, { id: event.id }, event.data);
+        await em.nativeUpdate(Task, { id: event.id }, event.data);
         return;
       default:
         return;

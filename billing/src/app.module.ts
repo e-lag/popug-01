@@ -21,7 +21,8 @@ import { StreamingModule } from './infrastructure/streaming/streaming.module';
     RabbitMQModule.forRoot(RabbitMQModule, {
       exchanges: EXCHANGES,
       uri: process.env['AMQP_URI'] ?? '',
-      connectionInitOptions: { wait: true },
+      connectionInitOptions: { wait: true, timeout: 10000 },
+      prefetchCount: 10,
     }),
     AuthModule,
     CqrsModule,

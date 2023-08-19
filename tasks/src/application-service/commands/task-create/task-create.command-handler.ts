@@ -8,7 +8,7 @@ import { TaskStatuses } from '../../../enums/task-statuses.enum';
 import { UuidGenerator } from '../../../infrastructure/uuid.generator';
 import { UserRoles } from '../../../types/user-roles.enum';
 import { TaskCreatedStreamEvent } from '../../events-stream/task-created/task-created.stream-event';
-import { TaskAssignerSetEvent } from '../../events/task-assigner-set/task-assigner-set.event';
+import { TaskAssignedEvent } from '../../events/task-assigned/task-assigned.event';
 import { TaskCreateCommand } from './task-create.command';
 
 @CommandHandler(TaskCreateCommand)
@@ -41,8 +41,8 @@ export class TaskCreateCommandHandler
       status: TaskStatuses.OPEN,
     });
     await this.em.persistAndFlush(task);
-    this.eventBus.publish(new TaskAssignerSetEvent(task));
     this.eventBus.publish(new TaskCreatedStreamEvent(task));
+    this.eventBus.publish(new TaskAssignedEvent(task));
 
     return task;
   }

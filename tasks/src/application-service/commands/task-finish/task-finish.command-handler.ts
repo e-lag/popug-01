@@ -1,4 +1,5 @@
 import { EntityManager } from '@mikro-orm/postgresql';
+import { Logger } from '@nestjs/common';
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { Task } from '../../../enitities/task.entity';
 import { TaskStatuses } from '../../../enums/task-statuses.enum';
@@ -10,12 +11,15 @@ import { TaskFinishCommand } from './task-finish.command';
 export class TaskFinishCommandHandler
   implements ICommandHandler<TaskFinishCommand>
 {
+  private _logger = new Logger(TaskFinishCommandHandler.name);
+
   constructor(
     private readonly em: EntityManager,
     private readonly eventBus: EventBus,
   ) {}
 
   public async execute(command: TaskFinishCommand): Promise<any> {
+    this._logger.debug(command);
     const task = await this.em.findOneOrFail(Task, {
       id: command.id,
       assigner: command.user.id,

@@ -1,5 +1,5 @@
 import { Task } from '../../../enitities/task.entity';
 
-export class TaskAssignerSetEvent {
+export class TaskAssignedEvent {
   constructor(public readonly task: Task) {}
 }
