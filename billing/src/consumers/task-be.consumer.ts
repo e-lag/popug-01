@@ -36,6 +36,10 @@ export class TaskBeConsumer {
       TaskFinishedEventV1.exchange +
       TaskFinishedEventV1.routingKey +
       '-task-srv',
+    queueOptions: {
+      deadLetterExchange: TaskFinishedEventV1.exchange,
+      deadLetterRoutingKey: TaskFinishedEventV1.routingKey + 'deadLetter',
+    },
   })
   public async taskFinishedEvent(
     eventPayload: TaskFinishedEventV1,

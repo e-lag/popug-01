@@ -20,6 +20,10 @@ export class TaskStreamingConsumer {
       TaskCreatedStreamEventV1.exchange +
       TaskCreatedStreamEventV1.routingKey +
       '-task-srv',
+    queueOptions: {
+      deadLetterExchange: TaskCreatedStreamEventV1.exchange,
+      deadLetterRoutingKey: TaskCreatedStreamEventV1.routingKey + 'deadLetter',
+    },
   })
   public async userCreatedStreamEvent(
     eventPayload: TaskCreatedStreamEventV1,
@@ -36,6 +40,10 @@ export class TaskStreamingConsumer {
       TaskUpdatedStreamEventV1.exchange +
       TaskUpdatedStreamEventV1.routingKey +
       '-task-srv',
+    queueOptions: {
+      deadLetterExchange: TaskUpdatedStreamEventV1.exchange,
+      deadLetterRoutingKey: TaskUpdatedStreamEventV1.routingKey + 'deadLetter',
+    },
   })
   public async userUpdatedStreamEvent(
     eventPayload: TaskUpdatedStreamEventV1,
