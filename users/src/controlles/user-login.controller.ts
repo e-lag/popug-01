@@ -18,13 +18,13 @@ import {
 } from '@nestjs/swagger';
 
 import { UserFacade } from '../application-service';
-import { AuthRequest } from '../auth/auth.request';
 import {
   LoginRequestDto,
   LoginResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
 } from '../dtos';
+import { AuthRequest } from '../infrastructure/auth/auth.request';
 import { UserErrors } from '../infrastructure/user.errors';
 
 @ApiTags('users')

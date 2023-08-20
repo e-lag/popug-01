@@ -11,14 +11,14 @@ import {
 } from './application-service';
 import { USER_CUD_EVENT_HANDLERS } from './application-service/events-cud/user-cud-event-handlres.const';
 import { USER_EVENT_HANDLERS } from './application-service/events/user-event-handlres.const';
-import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
-import { JWT_CONFIG_FACTORY } from './auth/jwt-config.factory';
-import { JwtStrategy } from './auth/jwt.strategy';
-import { EXCHANGES } from './contracts/exchanges';
 import { UserLoginController } from './controlles/user-login.controller';
 import { UserController } from './controlles/user.controller';
 import { REPOSITORY_ENTITIES } from './enitities/repository.entities';
+import { AuthModule } from './infrastructure/auth/auth.module';
+import { AuthService } from './infrastructure/auth/auth.service';
+import { JWT_CONFIG_FACTORY } from './infrastructure/auth/jwt-config.factory';
+import { JwtStrategy } from './infrastructure/auth/jwt.strategy';
+import { EXCHANGES } from './infrastructure/contracts/exchanges';
 import { UtilsMikroOrmModule } from './infrastructure/mikro-orm.module';
 import { UserRepositoryAdapter } from './infrastructure/user.repository-adapter';
 

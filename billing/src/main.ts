@@ -7,10 +7,10 @@ import { swaggerGenerate } from './infrastructure/swagger';
 
 async function bootstrap() {
   dotenv.config();
-  const PORT = process.env['HTTP_PORT'] || '3702';
+  const PORT = process.env['HTTP_PORT'] || '3704';
   const app = await NestFactory.create(AppModule);
   swaggerGenerate(app, {
-    appName: 'users',
+    appName: 'Billing',
     port: PORT,
     version: '1',
     developPublicUrl: undefined,
@@ -18,6 +18,6 @@ async function bootstrap() {
   });
 
   await app.listen(PORT);
-  Logger.log(`Tasks start on http://localhost:${PORT}/`, 'APP');
+  Logger.log(`Billing service start on http://localhost:${PORT}/`, 'APP');
 }
 bootstrap();

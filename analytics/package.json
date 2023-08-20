@@ -8,16 +8,21 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start:billing": "nest start",
-    "start:dev:billing": "nest start --watch",
-    "start:debug:billing": "nest start --debug --watch",
-    "start:prod:billing": "node dist/main",
+    "start:analytics": "nest start",
+    "start:dev:analytics": "nest start --watch",
+    "start:debug:analytics": "nest start --debug --watch",
+    "start:prod:analytics": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+
+    "migration:up": "npx mikro-orm migration:up",
+    "migration:down": "npx mikro-orm migration:down",
+    "migration:create": "npx mikro-orm migration:create",
+    "migration:init": "npx mikro-orm migration:create --initial"
   },
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^4.0.0",

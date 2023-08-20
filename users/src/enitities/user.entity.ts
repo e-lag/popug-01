@@ -1,8 +1,8 @@
 import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { randomBytes } from 'node:crypto';
 import { pbkdf2Sync } from 'pbkdf2';
-import { INTERVAL_15_MINUTES } from '../common/intervals.consts';
 import { MAX_INCORRECT_LOGINS, PASSWORD_HASH_CONFIG } from '../config.consts';
+import { INTERVAL_15_MINUTES } from '../infrastructure/intervals.consts';
 
 import { UserPassword } from '../types/user-password.type';
 import { UserRoles } from '../types/user-roles.enum';
@@ -10,7 +10,7 @@ import { UserRoles } from '../types/user-roles.enum';
 @Entity({ tableName: 'user' })
 @Unique({ properties: ['email'] })
 export class User {
-  @PrimaryKey()
+  @PrimaryKey({ type: 'uuid' })
   public id: string;
 
   @Property({ nullable: true })
