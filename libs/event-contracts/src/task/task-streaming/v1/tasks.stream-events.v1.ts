@@ -9,6 +9,7 @@ import { TASK_EXCHANGE } from '../../task.exchange';
 export type TaskStreamPayloadV1 = {
   id: string;
   title: string;
+  jiraId?: string;
   description: string;
   assigner: string;
   priceAssign: number;

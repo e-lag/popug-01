@@ -5,6 +5,7 @@ import { TASK_EXCHANGE } from '../../task.exchange';
 export type TaskAssignedEventV1Payload = {
   id: string;
   title: string;
+  jiraId?: string;
   description: string;
   assigner: string;
   priceAssign: number;
