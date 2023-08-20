@@ -27,11 +27,24 @@ export class TaskCreateCommandHandler
       isActive: true,
       role: UserRoles.CUSTOMER,
     });
+
+    let { title } = command.task;
+    let jiraId: string | undefined = undefined;
+    const { description } = command.task;
+    const jiraIdPattern = /(\[(.*)\])(\s?-\s?)(.*$)?|(^.*$)?/gi;
+    const titleParseResult = jiraIdPattern.exec(title);
+    if (!!titleParseResult[2] && !!titleParseResult[4]) {
+      jiraId = titleParseResult[2];
+      title = titleParseResult[4];
+    }
+
     const rndUserIndex = Math.floor(Math.random() * assigners.length);
     const newAssigner = assigners[rndUserIndex];
     this._logger.debug({ newAssigner, rndUserIndex });
     const task = this.em.create(Task, {
-      ...command.task,
+      title,
+      jiraId,
+      description,
       id: UuidGenerator.generate(),
       createdAt: new Date(),
       updatedAt: new Date(),

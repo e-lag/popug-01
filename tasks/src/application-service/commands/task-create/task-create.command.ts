@@ -1,16 +1,8 @@
-import { Task } from '../../../enitities/task.entity';
+export type TaskAdd = {
+  title: string;
+  description: string;
+};
 
 export class TaskCreateCommand {
-  constructor(
-    public readonly task: Omit<
-      Task,
-      | 'id'
-      | 'createdAt'
-      | 'updatedAt'
-      | 'priceAssign'
-      | 'priceFinish'
-      | 'assigner'
-      | 'status'
-    >,
-  ) {}
+  constructor(public readonly task: TaskAdd) {}
 }
