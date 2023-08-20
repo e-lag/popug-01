@@ -19,7 +19,7 @@ import { AuthModule } from './infrastructure/auth/auth.module';
 import { AuthService } from './infrastructure/auth/auth.service';
 import { JWT_CONFIG_FACTORY } from './infrastructure/auth/jwt-config.factory';
 import { JwtStrategy } from './infrastructure/auth/jwt.strategy';
-import { EXCHANGES } from './infrastructure/contracts/exchanges';
+import { EXCHANGES } from './infrastructure/exchanges';
 import { UtilsMikroOrmModule } from './infrastructure/mikro-orm.module';
 import { UserRepositoryAdapter } from './infrastructure/user.repository-adapter';
 

@@ -1,11 +1,11 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { StreamEventTypes } from '../../../infrastructure/contracts/cud-type-events.enum';
 import {
-  UserCreateStreamEventDto,
-  USERS_FANOUT_EXCHANGE,
-} from '../../../infrastructure/contracts/users-stream';
+  CudTypeEvents,
+  eventPayloadWrapper,
+  UserCreatedStreamEventV1,
+} from 'event-contracts/dist';
 
 import { UserCreatedEvent } from './user-created.event';
 
@@ -20,11 +20,10 @@ export class UserCreatedEventHandler
   public async handle(event: UserCreatedEvent): Promise<void> {
     this._logger.log({ event });
     const { user } = event;
-    //| UserUpdateCudEventDto
-    const userEvent: UserCreateStreamEventDto = {
-      id: user.id,
-      operation: StreamEventTypes.CREATE,
-      data: {
+    const userEvent: UserCreatedStreamEventV1 = eventPayloadWrapper(
+      CudTypeEvents.CREATED,
+      'v1',
+      {
         id: user.id,
         email: user.email,
         role: user.role.toString(),
@@ -35,10 +34,10 @@ export class UserCreatedEventHandler
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
-    };
+    );
     await this.amqpConnection.publish(
-      USERS_FANOUT_EXCHANGE.name,
-      userEvent.operation,
+      UserCreatedStreamEventV1.exchange,
+      UserCreatedStreamEventV1.routingKey,
       userEvent,
     );
   }

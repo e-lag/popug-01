@@ -5,7 +5,7 @@ import { Task } from '../../../enitities/task.entity';
 import { User } from '../../../enitities/user.entity';
 import { TaskStatuses } from '../../../enums/task-statuses.enum';
 import { UserRoles } from '../../../types/user-roles.enum';
-import { TaskChangedStreamEvent } from '../../events-stream/task-changed/task-changed.stream-event';
+import { TaskUpdatedStreamEvent } from '../../events-stream/task-changed/task-updated.stream-event';
 import { TaskAssignedEvent } from '../../events/task-assigned/task-assigned.event';
 import { ReassignTaskCommand } from './reassign-task.command';
 
@@ -32,7 +32,7 @@ export class ReassignTaskCommandHandler
       task.assigner = ref(newAssigner);
 
       await this.em.flush();
-      this.eventBus.publish(new TaskChangedStreamEvent(task));
+      this.eventBus.publish(new TaskUpdatedStreamEvent(task));
       this.eventBus.publish(new TaskAssignedEvent(task));
     }
   }

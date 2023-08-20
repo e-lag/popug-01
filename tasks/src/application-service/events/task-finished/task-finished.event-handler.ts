@@ -1,10 +1,12 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { eventPayloadWrapper } from 'event-contracts/dist';
 import {
-  TASK_FINISHED_EVENT_CONFIG,
-  TaskFinishedEventPayload,
-} from '../../../infrastructure/contracts/tasks-events';
+  TaskFinishedEventV1,
+  TaskFinishedEventV1Payload,
+} from 'event-contracts/dist/task/task-finished/v1/task-finished.event.v1.dto';
+
 import { TaskFinishedEvent } from './task-finished.event';
 
 @EventsHandler(TaskFinishedEvent)
@@ -17,12 +19,16 @@ export class TaskFinishedEventHandler
 
   public async handle(event: TaskFinishedEvent): Promise<void> {
     this._logger.log({ event });
-    const { task } = event;
 
-    await this.amqpConnection.publish<TaskFinishedEventPayload>(
-      TASK_FINISHED_EVENT_CONFIG.exchange.name,
-      TASK_FINISHED_EVENT_CONFIG.routingKey,
-      task,
+    const eventPayload: TaskFinishedEventV1Payload = {
+      ...event.task,
+      assigner: event.task.assigner.id,
+    };
+
+    await this.amqpConnection.publish<TaskFinishedEventV1>(
+      TaskFinishedEventV1.exchange,
+      TaskFinishedEventV1.routingKey,
+      eventPayloadWrapper('task-finished', 'v1', eventPayload),
     );
   }
 }

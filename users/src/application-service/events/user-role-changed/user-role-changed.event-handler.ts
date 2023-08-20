@@ -2,9 +2,9 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import {
-  UserRoleChangedEventDto,
-  USERS_FANOUT_EXCHANGE,
-} from '../../../infrastructure/contracts/users-stream';
+  eventPayloadWrapper,
+  UserRoleChangedEventV1,
+} from 'event-contracts/dist';
 
 import { UserRoleChangedEvent } from './user-role-changed.event';
 
@@ -19,10 +19,10 @@ export class UserRoleChangedEventHandler
   public async handle(event: UserRoleChangedEvent): Promise<void> {
     this._logger.log({ event });
     const { user } = event;
-    const userEvent: UserRoleChangedEventDto = {
-      id: user.id,
-      operation: 'user-role-changed',
-      data: {
+    const userEvent: UserRoleChangedEventV1 = eventPayloadWrapper(
+      'user-role-changed',
+      'v1',
+      {
         id: user.id,
         email: user.email,
         role: user.role.toString(),
@@ -33,10 +33,10 @@ export class UserRoleChangedEventHandler
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
-    };
+    );
     await this.amqpConnection.publish(
-      USERS_FANOUT_EXCHANGE.name,
-      userEvent.operation,
+      UserRoleChangedEventV1.exchange,
+      UserRoleChangedEventV1.routingKey,
       userEvent,
     );
   }

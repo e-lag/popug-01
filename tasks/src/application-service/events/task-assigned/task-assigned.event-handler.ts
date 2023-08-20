@@ -1,10 +1,11 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { eventPayloadWrapper } from 'event-contracts/dist';
 import {
-  TASK_ASSIGNED_EVENT_CONFIG,
-  TaskAssignedEventPayload,
-} from '../../../infrastructure/contracts/tasks-events';
+  TaskAssignedEventV1,
+  TaskAssignedEventV1Payload,
+} from 'event-contracts/dist/task/task-assigned/v1/task-assigned.event.v1.dto';
 import { TaskAssignedEvent } from './task-assigned.event';
 
 @EventsHandler(TaskAssignedEvent)
@@ -17,12 +18,16 @@ export class TaskAssignedEventHandler
 
   public async handle(event: TaskAssignedEvent): Promise<void> {
     this._logger.log({ event });
-    const { task } = event;
 
-    await this.amqpConnection.publish<TaskAssignedEventPayload>(
-      TASK_ASSIGNED_EVENT_CONFIG.exchange.name,
-      TASK_ASSIGNED_EVENT_CONFIG.routingKey,
-      task,
+    const eventPayload: TaskAssignedEventV1Payload = {
+      ...event.task,
+      assigner: event.task.assigner.id,
+    };
+
+    await this.amqpConnection.publish<TaskAssignedEventV1>(
+      TaskAssignedEventV1.exchange,
+      TaskAssignedEventV1.routingKey,
+      eventPayloadWrapper('task-assigned', 'v1', eventPayload),
     );
   }
 }
