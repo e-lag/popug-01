@@ -126,6 +126,15 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "jira_id": {
+          "name": "jira_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
         "description": {
           "name": "description",
           "type": "varchar(255)",
