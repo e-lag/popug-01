@@ -1,3 +1,4 @@
+import { FlushMode } from '@mikro-orm/core';
 import { MikroOrmModuleSyncOptions } from '@mikro-orm/nestjs/typings';
 import { ConfigService } from '@nestjs/config';
 import { REPOSITORY_ENTITIES } from './src/enitities/repository.entities';
@@ -12,5 +13,6 @@ const MikroOrmConfig: MikroOrmModuleSyncOptions = {
     disableForeignKeys: false,
     pathTs: './migrations',
   },
+  flushMode: FlushMode.COMMIT,
 };
 export default MikroOrmConfig;

@@ -126,6 +126,15 @@
           "nullable": false,
           "mappedType": "string"
         },
+        "jira_id": {
+          "name": "jira_id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "string"
+        },
         "description": {
           "name": "description",
           "type": "varchar(255)",
@@ -260,6 +269,24 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "assign_sum": {
+          "name": "assign_sum",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "finish_sum": {
+          "name": "finish_sum",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "close": {
           "name": "close",
           "type": "boolean",
@@ -286,6 +313,24 @@
           "primary": false,
           "nullable": false,
           "mappedType": "boolean"
+        },
+        "most_expensive_task": {
+          "name": "most_expensive_task",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
+        },
+        "most_chip_task": {
+          "name": "most_chip_task",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "integer"
         }
       },
       "name": "account",
@@ -319,6 +364,15 @@
     },
     {
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "account_id": {
           "name": "account_id",
           "type": "uuid",
@@ -336,54 +390,78 @@
           "primary": false,
           "nullable": false,
           "mappedType": "uuid"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
         }
       },
-      "name": "account_finished_tasks",
+      "name": "account_finished_task",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "account_finished_tasks_pkey",
           "columnNames": [
-            "account_id",
-            "task_id"
+            "account_id"
           ],
-          "composite": true,
+          "composite": false,
+          "keyName": "account_finished_task_account_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "account_finished_task_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
           "primary": true,
           "unique": true
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "account_finished_tasks_account_id_foreign": {
-          "constraintName": "account_finished_tasks_account_id_foreign",
+        "account_finished_task_account_id_foreign": {
+          "constraintName": "account_finished_task_account_id_foreign",
           "columnNames": [
             "account_id"
           ],
-          "localTableName": "public.account_finished_tasks",
+          "localTableName": "public.account_finished_task",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "public.account",
-          "deleteRule": "cascade",
           "updateRule": "cascade"
         },
-        "account_finished_tasks_task_id_foreign": {
-          "constraintName": "account_finished_tasks_task_id_foreign",
+        "account_finished_task_task_id_foreign": {
+          "constraintName": "account_finished_task_task_id_foreign",
           "columnNames": [
             "task_id"
           ],
-          "localTableName": "public.account_finished_tasks",
+          "localTableName": "public.account_finished_task",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "public.task",
-          "deleteRule": "cascade",
           "updateRule": "cascade"
         }
       }
     },
     {
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
+        },
         "account_id": {
           "name": "account_id",
           "type": "uuid",
@@ -401,48 +479,63 @@
           "primary": false,
           "nullable": false,
           "mappedType": "uuid"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "string"
         }
       },
-      "name": "account_assigned_tasks",
+      "name": "account_assigned_task",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "account_assigned_tasks_pkey",
           "columnNames": [
-            "account_id",
-            "task_id"
+            "account_id"
           ],
-          "composite": true,
+          "composite": false,
+          "keyName": "account_assigned_task_account_id_index",
+          "primary": false,
+          "unique": false
+        },
+        {
+          "keyName": "account_assigned_task_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
           "primary": true,
           "unique": true
         }
       ],
       "checks": [],
       "foreignKeys": {
-        "account_assigned_tasks_account_id_foreign": {
-          "constraintName": "account_assigned_tasks_account_id_foreign",
+        "account_assigned_task_account_id_foreign": {
+          "constraintName": "account_assigned_task_account_id_foreign",
           "columnNames": [
             "account_id"
           ],
-          "localTableName": "public.account_assigned_tasks",
+          "localTableName": "public.account_assigned_task",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "public.account",
-          "deleteRule": "cascade",
           "updateRule": "cascade"
         },
-        "account_assigned_tasks_task_id_foreign": {
-          "constraintName": "account_assigned_tasks_task_id_foreign",
+        "account_assigned_task_task_id_foreign": {
+          "constraintName": "account_assigned_task_task_id_foreign",
           "columnNames": [
             "task_id"
           ],
-          "localTableName": "public.account_assigned_tasks",
+          "localTableName": "public.account_assigned_task",
           "referencedColumnNames": [
             "id"
           ],
           "referencedTableName": "public.task",
-          "deleteRule": "cascade",
           "updateRule": "cascade"
         }
       }

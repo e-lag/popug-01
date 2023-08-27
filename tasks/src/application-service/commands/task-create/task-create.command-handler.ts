@@ -8,7 +8,7 @@ import { TaskStatuses } from '../../../enums/task-statuses.enum';
 import { UuidGenerator } from '../../../infrastructure/uuid.generator';
 import { UserRoles } from '../../../types/user-roles.enum';
 import { TaskCreatedStreamEvent } from '../../events-stream/task-created/task-created.stream-event';
-import { TaskAssignerSetEvent } from '../../events/task-assigner-set/task-assigner-set.event';
+import { TaskAssignedEvent } from '../../events/task-assigned/task-assigned.event';
 import { TaskCreateCommand } from './task-create.command';
 
 @CommandHandler(TaskCreateCommand)
@@ -27,11 +27,24 @@ export class TaskCreateCommandHandler
       isActive: true,
       role: UserRoles.CUSTOMER,
     });
+
+    let { title } = command.task;
+    let jiraId: string | undefined = undefined;
+    const { description } = command.task;
+    const jiraIdPattern = /(\[(.*)\])(\s?-\s?)(.*$)?|(^.*$)?/gi;
+    const titleParseResult = jiraIdPattern.exec(title);
+    if (!!titleParseResult[2] && !!titleParseResult[4]) {
+      jiraId = titleParseResult[2];
+      title = titleParseResult[4];
+    }
+
     const rndUserIndex = Math.floor(Math.random() * assigners.length);
     const newAssigner = assigners[rndUserIndex];
     this._logger.debug({ newAssigner, rndUserIndex });
     const task = this.em.create(Task, {
-      ...command.task,
+      title,
+      jiraId,
+      description,
       id: UuidGenerator.generate(),
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -41,8 +54,8 @@ export class TaskCreateCommandHandler
       status: TaskStatuses.OPEN,
     });
     await this.em.persistAndFlush(task);
-    this.eventBus.publish(new TaskAssignerSetEvent(task));
     this.eventBus.publish(new TaskCreatedStreamEvent(task));
+    this.eventBus.publish(new TaskAssignedEvent(task));
 
     return task;
   }

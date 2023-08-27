@@ -1,12 +1,11 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { CudTypeEvents } from '../../../infrastructure/contracts/cud-type-events.enum';
+import { CudTypeEvents, eventPayloadWrapper } from 'event-contracts/dist';
 import {
-  TaskCreateStreamEventDto,
-  TASKS_FANOUT_EXCHANGE,
-} from '../../../infrastructure/contracts/tasks-stream-events';
-import { TaskChangedStreamEvent } from '../task-changed/task-changed.stream-event';
+  TaskCreatedStreamEventV1,
+  TaskStreamPayloadV1,
+} from 'event-contracts/dist/task/task-streaming/v1/tasks.stream-events.v1';
 import { TaskCreatedStreamEvent } from './task-created.stream-event';
 
 @EventsHandler(TaskCreatedStreamEvent)
@@ -17,19 +16,18 @@ export class TaskCreatedStreamEventHandler
 
   constructor(private readonly amqpConnection: AmqpConnection) {}
 
-  public async handle(event: TaskChangedStreamEvent): Promise<void> {
+  public async handle(event: TaskCreatedStreamEvent): Promise<void> {
     this._logger.log({ event });
-    const { task } = event;
-    //| UserUpdateCudEventDto
-    const taskEvent: TaskCreateStreamEventDto = {
-      id: task.id,
-      operation: CudTypeEvents.CREATE,
-      data: { ...task, assigner: task.assigner.id },
+
+    const eventPayload: TaskStreamPayloadV1 = {
+      ...event.task,
+      assigner: event.task.assigner.id,
     };
-    await this.amqpConnection.publish(
-      TASKS_FANOUT_EXCHANGE.name,
-      '',
-      taskEvent,
+
+    await this.amqpConnection.publish<TaskCreatedStreamEventV1>(
+      TaskCreatedStreamEventV1.exchange,
+      TaskCreatedStreamEventV1.routingKey,
+      eventPayloadWrapper(CudTypeEvents.CREATED, 'v1', eventPayload),
     );
   }
 }

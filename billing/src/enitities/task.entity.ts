@@ -11,6 +11,9 @@ export class Task {
   @Property()
   public title: string;
 
+  @Property({ nullable: true })
+  public jiraId?: string | undefined;
+
   @Property({ nullable: false })
   public description: string;
 
@@ -35,6 +38,7 @@ export class Task {
   constructor(props: Task) {
     this.id = props.id;
     this.title = props.title;
+    this.jiraId = props.jiraId;
     this.description = props.description;
     this.assigner = props.assigner;
     this.priceAssign = props.priceAssign;

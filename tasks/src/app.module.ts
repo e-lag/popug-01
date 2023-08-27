@@ -11,10 +11,10 @@ import { TaskManagerController } from './controllers/task-manager.controller';
 import { TasksController } from './controllers/tasks.controller';
 import { REPOSITORY_ENTITIES } from './enitities/repository.entities';
 import { AuthModule } from './infrastructure/auth/auth.module';
-import { EXCHANGES } from './infrastructure/contracts/exchanges';
 import { UtilsMikroOrmModule } from './infrastructure/mikro-orm.module';
-import { StreamingModule } from './infrastructure/streaming/streaming.module';
 import { UuidGenerator } from './infrastructure/uuid.generator';
+import { EXCHANGES } from './consumers/exchanges';
+import { StreamingConsumersModule } from './consumers/streaming/streaming-consumers.module';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { UuidGenerator } from './infrastructure/uuid.generator';
     AuthModule,
     CqrsModule.forRoot(),
     UtilsMikroOrmModule.forRoot(REPOSITORY_ENTITIES, 'DATABASE_URL'),
-    StreamingModule,
+    StreamingConsumersModule,
   ],
   controllers: [TaskAssignerController, TaskManagerController, TasksController],
   providers: [

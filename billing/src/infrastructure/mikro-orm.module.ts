@@ -36,9 +36,9 @@ export class UtilsMikroOrmModule {
             Logger.verbose({ clientUrl }, 'MikroOrmModule');
             return {
               cache: {
-                enabled: false,
+                enabled: true,
               },
-              allowGlobalContext: true,
+              // allowGlobalContext: true,
               clientUrl,
               // debug: config.postgresDebug,
               entities,
