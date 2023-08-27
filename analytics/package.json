@@ -25,11 +25,13 @@
     "migration:init": "npx mikro-orm migration:create --initial"
   },
   "dependencies": {
+    "event-contracts": "file:../libs/event-contracts",
     "@golevelup/nestjs-rabbitmq": "^4.0.0",
     "@mikro-orm/core": "^5.7.14",
     "@mikro-orm/nestjs": "^5.2.0",
     "@mikro-orm/migrations": "^5.7.14",
     "@mikro-orm/postgresql": "^5.7.14",
+    "moment": "^2.29.4",
     "@nestjs/common": "10.1.2",
     "@nestjs/swagger": "7.1.4",
     "@nestjs/config": "^3.0.0",
