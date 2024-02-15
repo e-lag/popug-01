@@ -11,7 +11,7 @@ export class Task extends Identified {
   @Property({ nullable: false })
   public description: string;
 
-  @ManyToOne()
+  @ManyToOne(() => User)
   public assigner: User;
 
   @Property({ nullable: false })

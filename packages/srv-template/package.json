@@ -23,11 +23,6 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
-  "engines": {
-    "node": ">=18.12.1",
-    "yarn": ">=1.22.19"
-  },
-  "packageManager": "yarn@1.22.19",
   "dependencies": {
     "@golevelup/nestjs-rabbitmq": "^4.0.0",
     "@mikro-orm/core": "^5.7.14",

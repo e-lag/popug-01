@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npx tsc",
     "build:prod": "npm run clean && npx tsc",
-    "postinstall": "npm run build:prod",
+    "prepare": "npm run build:prod",
     "clean": "rimraf dist/ tsconfig.tsbuildinfo",
     "format": "eslint \"src/**/*.ts\" --fix",
     "lint": "eslint \"src/**/*.ts\""
@@ -15,14 +15,8 @@
   "author": "",
   "private": "true",
   "license": "Proprietary",
-  "engines": {
-    "node": ">=18.12.1",
-    "npm": ">=9.5.0"
-  },
-  "packageManager": "npm@9.5.0",
   "dependencies": {
   },
   "devDependencies": {
-    "@golevelup/nestjs-rabbitmq": "^4.0.0"
   }
 }

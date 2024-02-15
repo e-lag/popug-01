@@ -6,6 +6,7 @@
   "author": "",
   "workspaces": [
     "packages/utils/*",
+    "packages/srv-accounts",
     "packages/srv-tasks",
     "packages/srv-template",
     "packages/srv-users"

@@ -1,4 +1,4 @@
-export const SRV_TASKS_HTTP_PORT = '3701';
+export const SRV_TASKS_HTTP_PORT = '3703';
 export const SRV_TASKS_CURRENT_ENV = 'development';
 export const SRV_TASKS_IS_PRODUCT = 'false';
 export const SRV_TASKS_JWT_PUBLIC_KEY = '';
